@@ -1,5 +1,6 @@
 package com.capgemini;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class HotelReservation {
@@ -14,8 +15,10 @@ public class HotelReservation {
 		hotelReservationSystem.add(hotel2);
 		hotelReservationSystem.add(hotel3);
 		HotelReservation hotelReservation = new HotelReservation();
-		hotelReservation.addHotel();
+		//hotelReservation.addHotel();
 		System.out.println(hotelReservationSystem);
+		Hotel cheapestHotel = hotelReservation.findCheapestHotel();
+		System.out.println(cheapestHotel);
 	}
 	public void addHotel() {
 		System.out.println("Enter the name of the new hotel");
@@ -24,5 +27,32 @@ public class HotelReservation {
 		int hotelRate = Integer.parseInt(sc.nextLine());
 		Hotel hotel = new Hotel(hotelName,hotelRate);
 		hotelReservationSystem.add(hotel);
+	}
+	public Hotel findCheapestHotel() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
+		Hotel cheapestHotel = null;
+		try {
+			Calendar start = Calendar.getInstance();
+			Calendar end = Calendar.getInstance();
+			System.out.println("Enter the start date like 12Jan2020");
+			String startDate = sc.nextLine();
+			System.out.println("Enter the end date like 12Jan2020");
+			String endDate = sc.nextLine();
+			start.setTime(dateFormat.parse(startDate));
+			end.setTime(dateFormat.parse(endDate));
+			int minPrice = Integer.MAX_VALUE;
+			for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+			    for(Hotel hotel:hotelReservationSystem) {
+			    	if(hotel.getRate() < minPrice) {
+			    		minPrice = hotel.getRate();
+			    		cheapestHotel= hotel;
+			    	}
+			    }
+			}
+		}
+		catch(Exception e) {
+			System.out.println("cannot parse");
+		}
+		return cheapestHotel;
 	}
 }
