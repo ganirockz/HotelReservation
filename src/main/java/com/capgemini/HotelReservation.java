@@ -9,14 +9,16 @@ public class HotelReservation {
 
 	public static void main(String[] args) {
 		System.out.println("Welcome to Hotel Reservation");
-		Hotel hotel1 = new Hotel("Lakewood", 110, 90,3);
-		Hotel hotel2 = new Hotel("Bridgewood", 150, 50,4);
-		Hotel hotel3 = new Hotel("Ridgewood", 220, 150,5);
+		Hotel hotel1 = new Hotel("Lakewood", 110, 90, 3);
+		Hotel hotel2 = new Hotel("Bridgewood", 150, 50, 4);
+		Hotel hotel3 = new Hotel("Ridgewood", 220, 150, 5);
 		hotelReservationSystem.add(hotel1);
 		hotelReservationSystem.add(hotel2);
 		hotelReservationSystem.add(hotel3);
+		hotelReservationSystem.stream().forEach(System.out::println);
 		HotelReservation hotelReservation = new HotelReservation();
-		hotelReservation.findCheapestHotel("11Sep2020,12Sep2020");
+		String dateRange ="11Sep2020,12Sep2020";
+		hotelReservation.findCheapestHotel(dateRange);
 	}
 
 	public void addHotel() {
@@ -26,16 +28,18 @@ public class HotelReservation {
 		int weekDayRate = Integer.parseInt(sc.nextLine());
 		System.out.println("Enter the weekEnd rate of the hotel");
 		int weekEndRate = Integer.parseInt(sc.nextLine());
-		Hotel hotel = new Hotel(hotelName, weekDayRate, weekEndRate);
+		System.out.println("Enter the rating of hotel");
+		int rating = Integer.parseInt(sc.nextLine());
+		Hotel hotel = new Hotel(hotelName, weekDayRate, weekEndRate, rating);
 		hotelReservationSystem.add(hotel);
 	}
 
 	@SuppressWarnings("deprecation")
 	public void findCheapestHotel(String dateRange) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
-		List<String> cheapestHotel = new ArrayList<String>();
+		List<Hotel> cheapestHotel = new ArrayList<Hotel>();
 		String[] dates = dateRange.split(",");
-		Map<String, Integer> priceMap = new HashMap<String, Integer>();
+		Map<Hotel, Integer> priceMap = new HashMap<Hotel, Integer>();
 		try {
 			int minHotelPrice = Integer.MAX_VALUE;
 			for (Hotel hotel : hotelReservationSystem) {
@@ -49,23 +53,27 @@ public class HotelReservation {
 					} else {
 						hotelPrice += hotel.getWeekdayRate();
 					}
-					priceMap.put(hotel.getName(), hotelPrice);
+					priceMap.put(hotel, hotelPrice);
 				}
 				if (minHotelPrice > hotelPrice) {
 					minHotelPrice = hotelPrice;
 				}
 			}
 
-			for (Map.Entry<String, Integer> entry : priceMap.entrySet()) {
-				System.out.println(entry.getKey() + " " + entry.getValue());
+			for (Map.Entry<Hotel, Integer> entry : priceMap.entrySet()) {
 				if (entry.getValue().equals(minHotelPrice)) {
 					cheapestHotel.add(entry.getKey());
 				}
 			}
-			for (String hotelName : cheapestHotel) {
-				System.out.print(hotelName + ",");
+			String hotelName = null;
+			int hotelRating = 0;
+			for (Hotel hotel : cheapestHotel) {
+				if (hotel.getRating() > hotelRating) {
+					hotelName = hotel.getName();
+					hotelRating = hotel.getRating();
+				}
 			}
-			System.out.print(" is/are cheapest hotel/hotels with rate " + minHotelPrice);
+			System.out.print(hotelName + ",Rating:" + hotelRating + " and TotalRates:" + minHotelPrice);
 		} catch (Exception e) {
 			System.out.println("cannot parse");
 		}
