@@ -50,7 +50,7 @@ public class HotelReservation {
 		if (trueCount != dates.length) {
 			throw new InvalidEntryException("Please enter the valid date range");
 		}
-		hotelReservation.findCheapestHighRatedHotel(dateRange);
+		hotelReservation.findHighRatedHotel(dateRange);
 	}
 
 	public void addHotel() {
@@ -71,14 +71,8 @@ public class HotelReservation {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
 		String[] dates = dateRange.split(",");
 		try {
-			int hotelRating = 0;
-			Hotel highRatedHotel = null;
-			for (Hotel hotel : hotelReservationSystem) {
-				if (hotel.getRating() > hotelRating) {
-					highRatedHotel = hotel;
-					hotelRating = hotel.getRating();
-				}
-			}
+			hotelReservationSystem.stream().sorted(Comparator.comparing(Hotel::getRating));
+			Hotel highRatedHotel = hotelReservationSystem.get(hotelReservationSystem.size() - 1);
 			int hotelPrice = 0;
 			for (int i = 0; i < dates.length; i++) {
 				Calendar tempDate = Calendar.getInstance();
@@ -90,6 +84,7 @@ public class HotelReservation {
 					hotelPrice += highRatedHotel.getWeekdayRate();
 				}
 			}
+			System.out.println("The high rated hotel is");
 			System.out.println(highRatedHotel.getName() + " & Total Rates:" + hotelPrice);
 		} catch (Exception e) {
 			System.out.println("cannot parse");
