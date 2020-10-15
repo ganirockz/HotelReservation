@@ -13,7 +13,6 @@ public class HotelReservationTest {
 		hotelReservation.hotelReservationSystem.add(hotel1);
 		hotelReservation.hotelReservationSystem.add(hotel2);
 		hotelReservation.hotelReservationSystem.add(hotel3);
-		Hotel hotel = hotelReservation.findCheapestHotel();
-		Assert.assertEquals(hotel1, hotel);
+		hotelReservation.findCheapestHotel("11Sep2020,12Sep2020");
 	}
 }
