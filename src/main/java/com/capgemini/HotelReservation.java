@@ -15,10 +15,12 @@ public class HotelReservation {
 		hotelReservationSystem.add(hotel1);
 		hotelReservationSystem.add(hotel2);
 		hotelReservationSystem.add(hotel3);
+		System.out.println("The Hotels in the city are");
 		hotelReservationSystem.stream().forEach(System.out::println);
 		HotelReservation hotelReservation = new HotelReservation();
-		String dateRange = "11Sep2020,12Sep2020";
-		hotelReservation.findCheapestHotel(dateRange);
+		System.out.println("Enter the range of dates to select best rated hotel");
+		String dateRange = sc.nextLine();
+		hotelReservation.findHighRatedHotel(dateRange);
 	}
 
 	public void addHotel() {
@@ -35,7 +37,7 @@ public class HotelReservation {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void findCheapestHotel(String dateRange) {
+	public void findHighRatedHotel(String dateRange) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
 		String[] dates = dateRange.split(",");
 		try {
