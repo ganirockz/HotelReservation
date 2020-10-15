@@ -9,9 +9,18 @@ public class HotelReservation {
 
 	public static void main(String[] args) {
 		System.out.println("Welcome to Hotel Reservation");
-		Hotel hotel1 = new Hotel("Lakewood", 110, 90, 3);
-		Hotel hotel2 = new Hotel("Bridgewood", 150, 50, 4);
-		Hotel hotel3 = new Hotel("Ridgewood", 220, 150, 5);
+		System.out.println("Enter the type of customer:");
+		String customerType = sc.nextLine();
+		Hotel hotel1 = null, hotel2 = null, hotel3 = null;
+		if (customerType.toLowerCase().equals("rewards")) {
+			hotel1 = new Hotel("Lakewood", 80, 80, 3);
+			hotel2 = new Hotel("Bridgewood", 110, 50, 4);
+			hotel3 = new Hotel("Ridgewood", 100, 40, 5);
+		} else {
+			hotel1 = new Hotel("Lakewood", 110, 90, 3);
+			hotel2 = new Hotel("Bridgewood", 150, 50, 4);
+			hotel3 = new Hotel("Ridgewood", 220, 150, 5);
+		}
 		hotelReservationSystem.add(hotel1);
 		hotelReservationSystem.add(hotel2);
 		hotelReservationSystem.add(hotel3);
