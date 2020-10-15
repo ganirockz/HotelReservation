@@ -16,9 +16,10 @@ public class HotelReservation {
 
 	public static void main(String[] args) throws InvalidEntryException {
 		System.out.println("Welcome to Hotel Reservation");
-		Pattern CustomerTypePattern = Pattern.compile("[A-Z][a-z]{6}");
-		System.out.println("Enter the type of customer:");
-		String customerType = sc.nextLine();
+		System.out.println("Enter the type of customer and date range in <customerType>:<date1>,<date2> format:");
+		String customerInput = sc.nextLine();
+		String customerTypeAndDate[] = customerInput.split(":");
+		String customerType = customerTypeAndDate[0];
 		if (!(reservation.validate("[A-Z][a-z]{6}", customerType))) {
 			throw new InvalidEntryException("please enter valid customer type");
 		}
@@ -38,10 +39,7 @@ public class HotelReservation {
 		System.out.println("The Hotels in the city are");
 		hotelReservationSystem.stream().forEach(System.out::println);
 		HotelReservation hotelReservation = new HotelReservation();
-		Pattern DateTypePattern = Pattern.compile("[0-9]{2}[A-Z][a-z]{2}[0-9]{4}");
-		String dateRange;
-		System.out.println("Enter the range of dates to select best rated hotel");
-		dateRange = sc.nextLine();
+		String dateRange = customerTypeAndDate[1];
 		String[] dates = dateRange.split(",");
 		int trueCount = 0;
 		for (String date : dates) {
@@ -129,15 +127,10 @@ public class HotelReservation {
 					cheapestHotel.add(entry.getKey());
 				}
 			}
-			String hotelName = null;
-			int hotelRating = 0;
-			for (Hotel hotel : cheapestHotel) {
-				if (hotel.getRating() > hotelRating) {
-					hotelName = hotel.getName();
-					hotelRating = hotel.getRating();
-				}
-			}
-			System.out.print(hotelName + ",Rating:" + hotelRating + " and TotalRates:" + minHotelPrice + "$");
+			cheapestHotel.stream().sorted(Comparator.comparing(Hotel::getRating));
+			System.out.println("The Cheapest hotel with best rating is:");
+			System.out.println(cheapestHotel.get(cheapestHotel.size() - 1).getName() + ",Rating:"
+					+ cheapestHotel.get(cheapestHotel.size() - 1).getRating() + " and TotalRates: $" + minHotelPrice);
 		} catch (Exception e) {
 			System.out.println("cannot parse");
 		}
