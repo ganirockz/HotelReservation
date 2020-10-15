@@ -13,6 +13,6 @@ public class HotelReservationTest {
 		hotelReservation.hotelReservationSystem.add(hotel1);
 		hotelReservation.hotelReservationSystem.add(hotel2);
 		hotelReservation.hotelReservationSystem.add(hotel3);
-		hotelReservation.findCheapestHotel("11Sep2020,12Sep2020");
+		hotelReservation.findHighRatedHotel("11Sep2020,12Sep2020");
 	}
 }
