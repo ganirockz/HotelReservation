@@ -17,7 +17,7 @@ public class HotelReservation {
 		hotelReservationSystem.add(hotel3);
 		hotelReservationSystem.stream().forEach(System.out::println);
 		HotelReservation hotelReservation = new HotelReservation();
-		String dateRange ="11Sep2020,12Sep2020";
+		String dateRange = "11Sep2020,12Sep2020";
 		hotelReservation.findCheapestHotel(dateRange);
 	}
 
@@ -37,43 +37,28 @@ public class HotelReservation {
 	@SuppressWarnings("deprecation")
 	public void findCheapestHotel(String dateRange) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMMyyyy");
-		List<Hotel> cheapestHotel = new ArrayList<Hotel>();
 		String[] dates = dateRange.split(",");
-		Map<Hotel, Integer> priceMap = new HashMap<Hotel, Integer>();
 		try {
-			int minHotelPrice = Integer.MAX_VALUE;
-			for (Hotel hotel : hotelReservationSystem) {
-				int hotelPrice = 0;
-				for (int i = 0; i < dates.length; i++) {
-					Calendar tempDate = Calendar.getInstance();
-					tempDate.setTime(dateFormat.parse(dates[i]));
-					Date date = tempDate.getTime();
-					if ((date.getDay() == 0) || (date.getDay() == 6)) {
-						hotelPrice += hotel.getWeekendRate();
-					} else {
-						hotelPrice += hotel.getWeekdayRate();
-					}
-					priceMap.put(hotel, hotelPrice);
-				}
-				if (minHotelPrice > hotelPrice) {
-					minHotelPrice = hotelPrice;
-				}
-			}
-
-			for (Map.Entry<Hotel, Integer> entry : priceMap.entrySet()) {
-				if (entry.getValue().equals(minHotelPrice)) {
-					cheapestHotel.add(entry.getKey());
-				}
-			}
-			String hotelName = null;
 			int hotelRating = 0;
-			for (Hotel hotel : cheapestHotel) {
+			Hotel highRatedHotel = null;
+			for (Hotel hotel : hotelReservationSystem) {
 				if (hotel.getRating() > hotelRating) {
-					hotelName = hotel.getName();
+					highRatedHotel = hotel;
 					hotelRating = hotel.getRating();
 				}
 			}
-			System.out.print(hotelName + ",Rating:" + hotelRating + " and TotalRates:" + minHotelPrice);
+			int hotelPrice = 0;
+			for (int i = 0; i < dates.length; i++) {
+				Calendar tempDate = Calendar.getInstance();
+				tempDate.setTime(dateFormat.parse(dates[i]));
+				Date date = tempDate.getTime();
+				if ((date.getDay() == 0) || (date.getDay() == 6)) {
+					hotelPrice += highRatedHotel.getWeekendRate();
+				} else {
+					hotelPrice += highRatedHotel.getWeekdayRate();
+				}
+			}
+			System.out.println(highRatedHotel.getName() + " & Total Rates:" + hotelPrice);
 		} catch (Exception e) {
 			System.out.println("cannot parse");
 		}
